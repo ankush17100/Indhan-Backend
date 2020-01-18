@@ -32,3 +32,12 @@ class FuelConsumed(models.Model):
     fuel = models.DecimalField(decimal_places=2,max_digits=10)
     def __str__(self):
         return self.user.username+" | "+str(self.date)
+
+class CurrentData(models.Model):
+    user = models.ForeignKey(UserAccount,on_delete=models.CASCADE)
+    lon = models.DecimalField(max_digits=10,decimal_places=6)
+    lat = models.DecimalField(max_digits=10,decimal_places=6)
+    totalDistance = models.DecimalField(max_digits=10,decimal_places=6)
+    petrolLevel = models.DecimalField(max_digits=10,decimal_places=6)
+    petrolConsumed = models.DecimalField(max_digits=10,decimal_places=6)
+    date = models.DateField()

@@ -4,9 +4,26 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 # Create your views here.
-from .models import UserAccount, Mileage, Distance, FuelConsumed
+from .models import UserAccount, Mileage, Distance, FuelConsumed, CurrentData
 import random
 # Create your views here.
+from math import sin,cos
+def deg2rad(deg):
+    return deg*pi/180
+
+def rad2deg(rad):
+    return rad*180/pi
+
+def distance(lat1,lon1,lat2,lon2,unit):
+    if(lat1==lat2 and lon1==lon2):
+        return 0
+    else:
+        theta = lon1-lon2
+        dist = sin(deg2rad(lat1))*sin(deg2rad(lat2))+cos(deg2rad(lat1))*cos(deg2rad(theta))
+        dist = rad2deg(dist)
+        dist = dist*60*1.1515
+        dist = dist * 1.609344
+        return dist
 
 def login(request):
     if request.method=='POST':
@@ -124,5 +141,49 @@ def DataEntry(request):
     else:
         pass
 
-# def TravelSessions(request):
-    # if request.method == "POST":
+def Refresh(request):
+    if request.method == "POST":
+        lat = request.POST['lat']
+        lon = request.POST['lon']
+        # time = request.POST['time']
+        petrolLeft = request.POST['petrol']
+        token = request.POST['token']
+        user = UserAccount.objects.get(token=token)
+        lastData = CurrentData.objects.get(user=user)
+        date = datetime.datetime.now().date()
+        if lastData.date==date:
+            # Increasing the distance traveled
+            currentDistance = distance(lat,lon,lastData.lat,lastData.lon)
+            lastData.lon = lon
+            lastData.lat = lat
+            lastData.totalDistance += currentDistance
+            # Increaseing the petrol cosomption
+            petrolConsumed = lastData.petrolLevel - petrolLeft
+            lastData.petrolConsumed += petrolConsumed
+            lastData.petrolLevel = petrolLeft
+            lastData.save()
+        else:
+            finalDistance = lastData.totalDistance
+            finalFuelConsumed = lastData.petrolConsumed
+            finalMileage = finalDistance/finalFuelConsumed
+            date = lastData.date
+            newDistance = Distance(
+                user = user,
+                date = date,
+                distance = finalDistance
+            )
+            newDistance.save()
+            newFuel = FuelConsumed(
+                user = user,
+                date = date,
+                fuel = finalFuelConsumed
+            )
+            newFuel.save()
+            newMileage = Mileage(
+                user = user,
+                data = data,
+                mileage = finalMileage
+            )
+            newMileage.save()
+    else:
+        pass
