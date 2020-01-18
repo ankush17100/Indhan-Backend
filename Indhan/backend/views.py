@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, logout
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-
+from django.http import JsonResponse
 # Create your views here.
 from .models import UserAccount, Mileage, DistanceTravelled, FuelConsumed
 
@@ -23,18 +23,33 @@ def login(request):
                 'success':True,
                 'token':userAccount.token
             }
-            return returnObject
+            return JsonResponse(returnObject)
         else:
             # Some problem with login
             print(userAccount)  
-            return {'success':False}
+            return JsonResponse({
+                'success':False}
+                )
 
 def signup(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
-        email = request.POST['email']
-        phoneNumber = request.POST
+        vehicleModel = request.POST['model']
+        token = [random.randint(1, 9) for a in range(0, 10)]
+        token = "".join(str(x) for x in token)
+        userAccount = UserAccount(
+            username = username,
+            password = password,
+            vehicleModel = vehicleModel,
+            token = token
+        )
+        userAccount.save()
+        return JsonResponse({
+            'success':True,
+            'token':token
+        })
+
 
 def index(request):
     

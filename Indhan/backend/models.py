@@ -4,7 +4,8 @@ from django.conf import settings
 
 # Create your models here.
 class UserAccount(models.Model):
-    username = models.CharField(max_length=10, default='1st')
+    username = models.CharField(max_length=20, default='1st')
+    password = models.CharField(max_length=20)
     vehicleModel = models.CharField(max_length=20)
     token = models.IntegerField()
     def __str__(self):
