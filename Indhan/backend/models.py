@@ -35,9 +35,11 @@ class FuelConsumed(models.Model):
 
 class CurrentData(models.Model):
     user = models.ForeignKey(UserAccount,on_delete=models.CASCADE)
-    lon = models.DecimalField(max_digits=10,decimal_places=6)
-    lat = models.DecimalField(max_digits=10,decimal_places=6)
-    totalDistance = models.DecimalField(max_digits=10,decimal_places=6)
-    petrolLevel = models.DecimalField(max_digits=10,decimal_places=6)
-    petrolConsumed = models.DecimalField(max_digits=10,decimal_places=6)
+    lon = models.FloatField()
+    lat = models.FloatField()
+    totalDistance = models.FloatField()
+    petrolLevel = models.FloatField()
+    petrolConsumed = models.FloatField()
     date = models.DateField()
+    def __str__(self):
+        return self.user.username+" | "+str(self.totalDistance)+" | "+str(self.petrolConsumed)

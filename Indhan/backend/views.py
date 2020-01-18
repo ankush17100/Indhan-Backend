@@ -6,15 +6,18 @@ from django.http import JsonResponse
 # Create your views here.
 from .models import UserAccount, Mileage, Distance, FuelConsumed, CurrentData
 import random
+import datetime
 # Create your views here.
-from math import sin,cos
+from math import sin,cos, pi
 def deg2rad(deg):
     return deg*pi/180
 
 def rad2deg(rad):
     return rad*180/pi
 
-def distance(lat1,lon1,lat2,lon2,unit):
+def distance(lat1,lon1,lat2,lon2):
+    lat2 = float(lat2)
+    lon2 = float(lat2)
     if(lat1==lat2 and lon1==lon2):
         return 0
     else:
@@ -141,17 +144,37 @@ def DataEntry(request):
     else:
         pass
 
+def d2f(a):
+    return float(a)
+
 def Refresh(request):
     if request.method == "POST":
-        lat = request.POST['lat']
-        lon = request.POST['lon']
+        lat = float(request.POST['lat'])
+        lon = float(request.POST['lon'])
+        print("lat",request.POST)
+        print("lon",lon)
         # time = request.POST['time']
-        petrolLeft = request.POST['petrol']
+        petrolLeft = float(request.POST['petrol'])
         token = request.POST['token']
         user = UserAccount.objects.get(token=token)
         lastData = CurrentData.objects.get(user=user)
+        
+        lastData.lon = d2f(lastData.lon)
+        lastData.lat = d2f(lastData.lat)
+        lastData.totalDistance = d2f(lastData.totalDistance)
+        lastData.petrolLevel = d2f(lastData.petrolLevel)
+        lastData.petrolConsumed = d2f(lastData.petrolConsumed)
+
         date = datetime.datetime.now().date()
-        if lastData.date==date:
+        print(lat,lon,petrolLeft)
+        if lastData.lat==0 and lastData.lon==0:
+            lastData.lan = lat
+            lastData.lon = lon
+            lastData.petrolLeft = petrolLeft
+            lastData.date = date
+            lastData.save()
+            print(1)
+        elif lastData.date==date:
             # Increasing the distance traveled
             currentDistance = distance(lat,lon,lastData.lat,lastData.lon)
             lastData.lon = lon
@@ -162,6 +185,7 @@ def Refresh(request):
             lastData.petrolConsumed += petrolConsumed
             lastData.petrolLevel = petrolLeft
             lastData.save()
+            print(2)
         else:
             finalDistance = lastData.totalDistance
             finalFuelConsumed = lastData.petrolConsumed
@@ -185,5 +209,23 @@ def Refresh(request):
                 mileage = finalMileage
             )
             newMileage.save()
+        return JsonResponse({
+            'success':True
+        })
     else:
-        pass
+        return JsonRespose({
+            'success':False
+        })
+
+def Trip_plan(request):
+    # start location 
+    # destination location 
+    # token 
+    # distance of trip 
+    
+    # get the current value of petrol, 
+    # multiply it with mileage latest of car 
+    # (mileage from current day or from previous day)
+
+    
+    pass
