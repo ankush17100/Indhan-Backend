@@ -6,5 +6,8 @@ from . import views
 app_name = 'backend'
 
 urlpatterns = [
-    path('',views.index,name='index')
+    path('login',views.login,name='index'),
+    path('signup',views.signup,name='signup'),
+    path('index',views.home_screen,name="index"),
+
 ]

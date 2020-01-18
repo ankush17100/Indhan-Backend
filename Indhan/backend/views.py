@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 # Create your views here.
-from .models import UserAccount, Mileage, DistanceTravelled, FuelConsumed
+from .models import UserAccount, Mileage, Distance, FuelConsumed
 
 # Create your views here.
 
@@ -51,5 +51,61 @@ def signup(request):
         })
 
 
-def index(request):
-    
+def home_screen(request):
+    if request.method == "POST":
+        token = request.POST['token']
+        days = request.POST['days']
+        userAccount = UserAccount.objects.get(token=token)
+        if userAccount:
+            mileage = Mileage.objects.filter(userAccount = userAccount).filter('date')
+            distanceTravelled = DistanceTravelled.objects.filter(userAccount = userAccount).filter('date')
+            fuelConsumed = FuelConsumed.objects.filter(userAccount = userAccount).filter('date')
+            print(mileage)
+            print(distanceTravelled)
+            print(fuelConsumed)
+            resposeObject = {
+                'success':True,
+                'mileage':mileage[:days],
+                'distance':distanceTravelled[:days],
+                'fuel':fuelConsumed[:days]
+            }
+            return JsonResponse(resposeObject)
+        else:
+            return JsonResponse({
+                'success':False
+            })
+
+def DataEntry(request):
+    if request.method == "POST":
+        token = request.POST['token']
+        date = request.POST['date']
+        mileage = request.POST['mileage']
+        distance = request.POST['distance']
+        fuel = request.POST['fuel']
+        userAccount = UserAccount.objects.get(token=token)
+        if userAccount:
+            newMilage = Mileage(
+                user = userAccount,
+                date = date,
+                mileage = mileage
+            )
+            newMilage.save()
+            newDistance = DistanceTravelled(
+                user = userAccount,
+                date = date,
+                distance = distance
+            )
+            newDistance.save()
+            newFuel = FuelConsumed(
+                user = userAccount,
+                date = date,
+                fuel = fuel
+            )
+            newFuel.save()
+            resposeObject = {
+                'success':True,
+            }
+            return JsonResponse(resposeObject)
+
+    else:
+        pass
