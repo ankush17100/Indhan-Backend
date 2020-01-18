@@ -43,3 +43,11 @@ class CurrentData(models.Model):
     date = models.DateField()
     def __str__(self):
         return self.user.username+" | "+str(self.totalDistance)+" | "+str(self.petrolConsumed)
+
+class PetrolPump(models.Model):
+    name = models.CharField(max_length=20)
+    rating = models.FloatField()
+    number = models.IntegerField()
+    GRating = models.FloatField()
+    def __str__(self):
+        return self.name+" | "+str(self.rating)

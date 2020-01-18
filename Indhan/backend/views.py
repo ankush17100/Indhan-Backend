@@ -222,10 +222,12 @@ def Trip_plan(request):
     # destination location 
     # token 
     # distance of trip 
-    
+    # 
+
     # get the current value of petrol, 
     # multiply it with mileage latest of car 
     # (mileage from current day or from previous day)
 
+    # Multiply this with current petrol price and estimate trip plan
     
     pass
