@@ -4,9 +4,11 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 # Create your views here.
-from .models import UserAccount, Mileage, Distance, FuelConsumed, CurrentData
+from .models import UserAccount, Mileage, Distance, FuelConsumed, CurrentData, PetrolPump
 import random
 import datetime
+import requests, json 
+
 # Create your views here.
 from math import sin,cos, pi
 def deg2rad(deg):
@@ -191,29 +193,17 @@ def Refresh(request):
             finalFuelConsumed = lastData.petrolConsumed
             finalMileage = finalDistance/finalFuelConsumed
             date = lastData.date
-            newDistance = Distance(
-                user = user,
-                date = date,
-                distance = finalDistance
-            )
+            newDistance = Distance(user = user,date = date,distance = finalDistance)
             newDistance.save()
-            newFuel = FuelConsumed(
-                user = user,
-                date = date,
-                fuel = finalFuelConsumed
-            )
+            newFuel = FuelConsumed(user = user,date = date,fuel = finalFuelConsumed)
             newFuel.save()
-            newMileage = Mileage(
-                user = user,
-                data = data,
-                mileage = finalMileage
-            )
+            newMileage = Mileage(user = user,data = data,mileage = finalMileage)
             newMileage.save()
         return JsonResponse({
             'success':True
         })
     else:
-        return JsonRespose({
+        return JsonResponse({
             'success':False
         })
 
@@ -231,3 +221,60 @@ def Trip_plan(request):
     # Multiply this with current petrol price and estimate trip plan
     
     pass
+
+
+def webScrapping(request):
+    # Python program to get a set of  
+    # places according to your search  
+    # query using Google Places API 
+    
+    # importing required modules 
+    
+    # enter your api key here 
+    lat = request.POST['lat']
+    lon = request.POST['lon']
+    api_key = 'AIzaSyB76e5KFCFlE66xXtLg80jA7677k53Gcxs'
+    
+    # url variable store url 
+    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
+    
+    # The text string on which to search 
+    # keyword = input('Search query: ') 
+    keyword = "petrol pumps near me"
+    # Enter coordinates here
+
+    # TODO
+    # Enter code to put coordinates here
+    coordinates = lat+','+lon    
+    # coordinates = '21.2544787,81.6051032'
+    radius = '5000'
+
+    # get method of requests module 
+    # return response object
+    # This lists petrol pumps in ascending order 
+    URL = url + 'location=' + coordinates + '&keyword=' + keyword + '&key=' + api_key + '&rankby=' + 'distance'
+    r = requests.get(URL)
+    
+    # json method of response object convert 
+    #  json format data into python format data 
+    x = r.json() 
+    
+    # now x contains list of nested dictionaries 
+    # we know dictionary contain key value pair 
+    # store the value of result key in variable y 
+    y = x['results'] 
+    
+    # keep looping upto length of y
+    print('The closest petrol pump is:- ', y[0]['name'])
+    print('The list of petrol pumps in ascending order is:- ')
+    # for i in range(len(y)): 
+        # print(y[i]['name'])
+    pumps_json = {}
+    for i in range(len(y)):
+        pumps_json[i] = {'location': y[i]['geometry']['location'], 'name': y[i]['name'], 'rating': y[i]['rating'], 'Total_user_ratings': y[i]['user_ratings_total'], 'Area': y[i]['vicinity']}
+        print(pumps_json[i])
+
+    # Dumping ot a json file
+
+    # print(pumps_json)
+    return JsonResponse(pumps_json)

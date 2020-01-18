@@ -10,5 +10,6 @@ urlpatterns = [
     path('signup',views.signup,name='signup'),
     path('index',views.home_screen,name="index"),
     path('data',views.DataEntry,name="data"),
-    path('refresh',views.Refresh,name="refresh")
+    path('refresh',views.Refresh,name="refresh"),
+    path('petrolpump',views.webScrapping,name="petrolpump")
 ]
