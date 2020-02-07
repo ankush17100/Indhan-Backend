@@ -8,7 +8,8 @@ import requests, json
   
 # enter your api key here 
 api_key = 'AIzaSyB76e5KFCFlE66xXtLg80jA7677k53Gcxs'
-  
+# extra_key = 'AIzaSyBcgRX3YeXSB_LHLI5x46fgH4fdsuq9qkA'
+
 # url variable store url 
 url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
   

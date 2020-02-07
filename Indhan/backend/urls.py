@@ -18,4 +18,5 @@ urlpatterns = [
     path('petrol_pump_ratings_recommendation', views.petrol_pump_ratings_recommendation, name="petrol_pump_ratings_recommendation"),
     path('current_stats',views.CurrentStats,name="current_stats"),
     path('travel_time',views.travelTime,name="travel_time")
+    path('petrol_pump_ratings_response',views.petrol_pump_ratings_response,name="petrol_pump_ratings_response")
 ]

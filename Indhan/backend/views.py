@@ -539,11 +539,9 @@ def cities_and_prices(request):
 
 		# print(mydivs[0])
 
-
-
-		list1 = {}
-		for a in range(0, len(mydivs)):
-			t = mydivs[a]
+        list1 = {}
+        for a in range(0, len(mydivs)):
+            t = mydivs[a]
 
 			soup = BeautifulSoup(str(t ), 'lxml')
 
@@ -792,3 +790,100 @@ def travelTime(request):
 		'success':True,
 		'time':time
 	})
+    if request.method =="POST":
+        lat = request.POST['lat']
+        lon = request.POST['lon']
+
+        if lat == "0.0":
+            lat="21.2514"
+            lon="81.6296"
+        api_key = 'AIzaSyB76e5KFCFlE66xXtLg80jA7677k53Gcxs'
+        
+        # url variable store url 
+        url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
+        
+        # The text string on which to search 
+        # keyword = input('Search query: ') 
+        keyword = "petrol pumps near me"
+        # Enter coordinates here
+
+        # TODO
+        # Enter code to put coordinates here
+        coordinates = lat+','+lon    
+        # coordinates = '21.2544787,81.6051032'
+        radius = '5000'
+
+        # get method of requests module 
+        # return response object
+        # This lists petrol pumps in ascending order 
+        URL = url + 'location=' + coordinates + '&keyword=' + keyword + '&key=' + api_key + '&rankby=' + 'distance'
+        r = requests.get(URL)
+        
+        # json method of response object convert 
+        #  json format data into python format data 
+        x = r.json() 
+        
+        # now x contains list of nested dictionaries 
+        # we know dictionary contain key value pair 
+        # store the value of result key in variable y 
+        y = x['results'] 
+
+
+
+        if y == []:
+            y = [{'geometry': {'location': {'lat': 21.2513844, 'lng': 81.62964130000002}, 'viewport': {'northeast': {'lat': 21.25275162989272, 'lng': 81.63101507989272}, 'southwest': {'lat': 21.25005197010728, 'lng': 81.62831542010727}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': 'cef168c5a9f3d60afe694ff00352b6cffb321140', 'name': 'Harish Petrol Pump', 'place_id': 'ChIJn3Gjx5PdKDoRybXCCKIf28k', 'rating': 3.5, 'reference': 'ChIJn3Gjx5PdKDoRybXCCKIf28k', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 2, 'vicinity': 'Janta Colony, Station Road, Moudhapara, Raipur'}, {'geometry': {'location': {'lat': 21.2513844, 'lng': 81.62964130000002}, 'viewport': {'northeast': {'lat': 21.25275162989272, 'lng': 81.63101507989272}, 'southwest': {'lat': 21.25005197010728, 'lng': 81.62831542010727}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': '7aec0dbbf40909626382bf1efd7277a45a564664', 'name': 'Civil Court', 'place_id': 'ChIJn3Gjx5PdKDoRsauNsBisI_I', 'rating': 4.5, 'reference': 'ChIJn3Gjx5PdKDoRsauNsBisI_I', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 2, 'vicinity': 'Janta Colony, Station Road, Moudhapara, Raipur'}, {'geometry': {'location': {'lat': 21.2513844, 'lng': 81.62964130000002}, 'viewport': {'northeast': {'lat': 21.25275162989272, 'lng': 81.63101507989272}, 'southwest': {'lat': 21.25005197010728, 'lng': 81.62831542010727}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png', 'id': 'e50504fbaef509056cf577d28c3391cff0dad76d', 'name': 'Shri Jagannath Petrol Pump', 'place_id': 'ChIJn3Gjx5PdKDoRss5Lf6oiz5g', 'rating': 0, 'reference': 'ChIJn3Gjx5PdKDoRss5Lf6oiz5g', 'scope': 'GOOGLE', 'types': ['point_of_interest', 'establishment'], 'user_ratings_total': 0, 'vicinity': '2, Shri Jagannath Mandir Parisar, Gayatri Nagar, Raipur'}, {'geometry': {'location': {'lat': 21.2551492, 'lng': 81.6303858}, 'viewport': {'northeast': {'lat': 21.25650452989272, 'lng': 81.63171642989273}, 'southwest': {'lat': 21.25380487010728, 'lng': 81.62901677010728}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': '3edf8a731ab842a53a3bdd964488ac2c35e7f1d4', 'name': 'Popular Petrol Supply Co', 'place_id': 'ChIJFS6nB5LdKDoRhL6KhyYSxjs', 'rating': 4.5, 'reference': 'ChIJFS6nB5LdKDoRhL6KhyYSxjs', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 2, 'vicinity': 'Plot No:204, Station Road, Opp Hotel Panchsheel, Karveer'}, {'geometry': {'location': {'lat': 21.246665, 'lng': 81.63092000000002}, 'viewport': {'northeast': {'lat': 21.24802172989272, 'lng': 81.63222032989273}, 'southwest': {'lat': 21.24532207010728, 'lng': 81.62952067010728}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': '23faeca6c51a94d4b2854eaf3a4acec939001914', 'name': 'IndianOil', 'opening_hours': {'open_now': False}, 'place_id': 'ChIJhQTZgZbdKDoRlPPfGIO6j-w', 'plus_code': {'compound_code': '6JWJ+M9 Raipur, Chhattisgarh', 'global_code': '7MH36JWJ+M9'}, 'rating': 3.8, 'reference': 'ChIJhQTZgZbdKDoRlPPfGIO6j-w', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 17, 'vicinity': 'near SBI Bank ATM, Jawahar Nagar, Raipur'}, {'geometry': {'location': {'lat': 21.247542, 'lng': 81.6352907}, 'viewport': {'northeast': {'lat': 21.24889197989273, 'lng': 81.63657737989271}, 'southwest': {'lat': 21.24619232010728, 'lng': 81.63387772010726}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': 'fd844a4db07d949a237d4cc3b562404bbddb1573', 'name': 'Bharat Petroleum, Petrol Pump -Ahmedji Bhai & Sons', 'opening_hours': {'open_now': True}, 'place_id': 'ChIJuzjvEKrdKDoR4uf9sZikGis', 'plus_code': {'compound_code': '6JXP+24 Raipur, Chhattisgarh', 'global_code': '7MH36JXP+24'}, 'rating': 3, 'reference': 'ChIJuzjvEKrdKDoR4uf9sZikGis', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 4, 'vicinity': 'JAISTAMBH CHOWK, RAIPUR CI, Raipur'}, {'geometry': {'location': {'lat': 21.257033, 'lng': 81.62481}, 'viewport': {'northeast': {'lat': 21.25842387989272, 'lng': 81.62623467989272}, 'southwest': {'lat': 21.25572422010728, 'lng': 81.62353502010727}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': 'eab5ab2d2e4201787cb04b19c06faa2fe34bdccf', 'name': 'HP PETROL PUMP - MERAJ FUELS', 'opening_hours': {'open_now': True}, 'place_id': 'ChIJuXyez_LdKDoR-srzwvl4PAg', 'plus_code': {'compound_code': '7J4F+RW Raipur, Chhattisgarh', 'global_code': '7MH37J4F+RW'}, 'rating': 3.2, 'reference': 'ChIJuXyez_LdKDoR-srzwvl4PAg', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 107, 'vicinity': 'PH NO. 107 CSEB Road Near CSEB Gudhiyari Khal Bada, Shukrawari Bazar Rd, Raipur'}, {'geometry': {'location': {'lat': 21.2565128, 'lng': 81.63569609999999}, 'viewport': {'northeast': {'lat': 21.25790622989273, 'lng': 81.63705172989272}, 'southwest': {'lat': 21.25520657010728, 'lng': 81.63435207010728}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': 'fc2d313df9228098a2f963bb3849db678b3c74d4', 'name': 'Daga Petrol Pump', 'opening_hours': {'open_now': True}, 'photos': [{'height': 4608, 'html_attributions': ['<a href="https://maps.google.com/maps/contrib/112827700284920291323">Ashish Sharma</a>'], 'photo_reference': 'CmRaAAAAco7yShOOBZImEgTvcC_tXdhvhXYp_SLP1n_imdv54_J1I04V3QivhzKbgsbKVOXRs3BxpORxDOdozZe6IK14mHVI1GrblCCJzOawKWSzqEgojkumh1kNqfC87wKhfujuEhBnDa5d-S0uy7NmEpc8152eGhQn3ki9UYjmAeuDNOslxoWLyFrE9A', 'width': 3456}], 'place_id': 'ChIJ-ajU74_dKDoR4QjnwA9DUTs', 'plus_code': {'compound_code': '7J4P+J7 Raipur, Chhattisgarh', 'global_code': '7MH37J4P+J7'}, 'rating': 3.8, 'reference': 'ChIJ-ajU74_dKDoR4QjnwA9DUTs', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 519, 'vicinity': 'Station Rd, Nahar Para, Station Road, Moudhapara, Raipur'}, {'geometry': {'location': {'lat': 21.256577, 'lng': 81.636494}, 'viewport': {'northeast': {'lat': 21.25789557989272, 'lng': 81.63783242989273}, 'southwest': {'lat': 21.25519592010728, 'lng': 81.63513277010729}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': 'fb9f87e11b3cb7fc8169e3500f9ec3c1cc8e3424', 'name': 'Bharat Petroleum, Petrol Pump -Daga Brothers', 'opening_hours': {'open_now': True}, 'place_id': 'ChIJybuzTc_dKDoRQ6o73qYpPyo', 'plus_code': {'compound_code': '7J4P+JH Fafadih, Raipur, Chhattisgarh', 'global_code': '7MH37J4P+JH'}, 'rating': 3.6, 'reference': 'ChIJybuzTc_dKDoRQ6o73qYpPyo', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 7, 'vicinity': 'Raipura Chowk Rd, Fafadih, Raipur'}, {'geometry': {'location': {'lat': 21.2456166, 'lng': 81.6362666}, 'viewport': {'northeast': {'lat': 21.24696637989272, 'lng': 81.63757162989272}, 'southwest': {'lat': 21.24426672010728, 'lng': 81.63487197010728}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': '761659f0e7cd51139200dd14e5bc584b5fba8cdc', 'name': 'Quality Filling Station', 'place_id': 'ChIJ9bePiZfdKDoR6Cr5G0-NNuY', 'rating': 3, 'reference': 'ChIJ9bePiZfdKDoR6Cr5G0-NNuY', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 1, 'vicinity': 'House Of 265, Behind Gayatri Mandir, Samata Colony, Samata Colony, Raipur'}, {'geometry': {'location': {'lat': 21.243796, 'lng': 81.6363779}, 'viewport': {'northeast': {'lat': 21.24520442989272, 'lng': 81.63770307989272}, 'southwest': {'lat': 21.24250477010728, 'lng': 81.63500342010728}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': 'e0b76eed666f497cb0558cd4b438aaf1c78663ee', 'name': 'Bharat Petroleum', 'photos': [{'height': 1080, 'html_attributions': ['<a href="https://maps.google.com/maps/contrib/114688963882099614778">Ranjesh Kumar</a>'], 'photo_reference': 'CmRaAAAAuGev_8Uh17EhFDjMOTiB-JIzHHq2obpvKLwRdbdLH6TL6b-8gtKwJdF9lXH20IG5He3h2lz5WRuUoTGBOHNMgiFK5MUEtskcLVgX4PxMpeZzKTCKeSYRouZ5EoaLpK_vEhC_QpUkhzkeKD9RppkRwD34GhQHK_BA2renWVKaqjBtOVoFpmi1Qw', 'width': 1920}], 'place_id': 'ChIJP1z2_5fdKDoRYk8CSf8BqqI', 'plus_code': {'compound_code': '6JVP+GH Raipur, Chhattisgarh', 'global_code': '7MH36JVP+GH'}, 'rating': 3.8, 'reference': 'ChIJP1z2_5fdKDoRYk8CSf8BqqI', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 82, 'vicinity': 'Great Eastern Rd, Ganeshram Nagar, Raipur'}, {'geometry': {'location': {'lat': 21.2437574, 'lng': 81.6363519}, 'viewport': {'northeast': {'lat': 21.24517567989272, 'lng': 81.63766582989271}, 'southwest': {'lat': 21.24247602010728, 'lng': 81.63496617010726}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': 'd2f3c83d1ca35d71d85a43f48abad94d0d70e564', 'name': 'BP Petrol Bunk', 'place_id': 'ChIJ32T7_5fdKDoRC7N74rB533g', 'plus_code': {'compound_code': '6JVP+GG Raipur, Chhattisgarh', 'global_code': '7MH36JVP+GG'}, 'rating': 0, 'reference': 'ChIJ32T7_5fdKDoRC7N74rB533g', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 0, 'vicinity': 'Ganeshram Nagar, Byron Bazar, Raipur'}, {'geometry': {'location': {'lat': 21.2517542, 'lng': 81.6411974}, 'viewport': {'northeast': {'lat': 21.25306007989272, 'lng': 81.64245652989273}, 'southwest': {'lat': 21.25036042010728, 'lng': 81.63975687010728}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': 'ec8cc44b46031b00b252c0012b032b6fda0a95b8', 'name': 'Aastha Fuels', 'opening_hours': {'open_now': True}, 'photos': [{'height': 2592, 'html_attributions': ['<a href="https://maps.google.com/maps/contrib/117409221616875047576">Hoosain Narker</a>'], 'photo_reference': 'CmRaAAAA_0wwDFlUY5g0Eet-Nhap4IMhn4mZkKaP0GwHrFmrdO6vrrkZcWO5NG3ZcPd988mzNBdeAViTTo11xiSiNRlW4Y-4XIU9Ke-G7wjg7EXRYz2gQ5eM8o5qpt562Mj9s5etEhBDEY_hs1RyZDYcAqqj7KKaGhSKGku9Jq2dIh1yOiSTgv9n5xuOCw', 'width': 4608}], 'place_id': 'ChIJb0ABjpvdKDoRrbSmnCGNur4', 'plus_code': {'compound_code': '7J2R+PF Raipur, Chhattisgarh', 'global_code': '7MH37J2R+PF'}, 'rating': 3.7, 'reference': 'ChIJb0ABjpvdKDoRrbSmnCGNur4', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 19, 'vicinity': 'Devendra Nagar, Raipur'}, {'geometry': {'location': {'lat': 21.251753, 'lng': 81.6412631}, 'viewport': {'northeast': {'lat': 21.25304647989272, 'lng': 81.64249662989273}, 'southwest': {'lat': 21.25034682010727, 'lng': 81.63979697010728}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': '91ed8adc083748d500d5e8bca1255cd0768703b7', 'name': 'HP PETROL PUMP', 'opening_hours': {'open_now': True}, 'photos': [{'height': 1341, 'html_attributions': ['<a href="https://maps.google.com/maps/contrib/108784518866737615628">Muskan Parihar</a>'], 'photo_reference': 'CmRaAAAAwgo-jIni2yD-UawYephUjQpCdgRSmEbb-nGdCpLufb2OoCbkApYb7195YOqnmZ2yMu20uy7DFjvwG6RvJ2HpS1W00TDMtlLSFNFBVGwl1yBdQEfOsGLH9JB8W7tTcIUfEhAeQXmD5K-pqwWdYMQedv9KGhR55taSYC2e3Os9djrNYkH0VGpkLw', 'width': 1679}], 'place_id': 'ChIJL6dwjpvdKDoRQk1hTWwcebg', 'plus_code': {'compound_code': '7J2R+PG Devendra Nagar, Raipur, Chhattisgarh', 'global_code': '7MH37J2R+PG'}, 'rating': 3.3, 'reference': 'ChIJL6dwjpvdKDoRQk1hTWwcebg', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 32, 'vicinity': 'Jail Rd, Devendra Nagar, Raipur'}, {'geometry': {'location': {'lat': 21.24576, 'lng': 81.64059}, 'viewport': {'northeast': {'lat': 21.24715012989272, 'lng': 81.64205207989272}, 'southwest': {'lat': 21.24445047010728, 'lng': 81.63935242010727}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': '7925659125dcc5687058ec5d7aef3f7a015f05bf', 'name': 'HP PETROL PUMP - ANOOP AUTO SERVICES', 'opening_hours': {'open_now': True}, 'photos': [{'height': 1840, 'html_attributions': ['<a href="https://maps.google.com/maps/contrib/115847946694899531286">hari puri</a>'], 'photo_reference': 'CmRaAAAAsjf7Qh262vQwL8P-nIqOTVcq1mJLC9y8V7gHW69A1GZotcr586arpgIjkzDz-ZdiXyxEihT8OVdNDPEStXWAkpyoD4ERFhsE-oY3m8vyQKhrEa55-yJwlYUrus7rGE3SEhB4vx3oix_zmpvu_lX8dIcMGhRMhZeJVKZBNvD_xg8xncI1IWyFBQ', 'width': 3280}], 'place_id': 'ChIJS_CMwZjdKDoRgTeUShOpmuQ', 'plus_code': {'compound_code': '6JWR+86 Raipur, Chhattisgarh', 'global_code': '7MH36JWR+86'}, 'rating': 3.5, 'reference': 'ChIJS_CMwZjdKDoRgTeUShOpmuQ', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 13, 'vicinity': 'HPC Dealer G.E. Road, OPP Secretariate Post & Dist. (CG), Raipur'}, {'geometry': {'location': {'lat': 21.245662, 'lng': 81.640689}, 'viewport': {'northeast': {'lat': 21.24693847989272, 'lng': 81.64204587989272}, 'southwest': {'lat': 21.24423882010727, 'lng': 81.63934622010729}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': 'f552ce674afe3f5eaca047fa6eae9b73bef0996e', 'name': 'Club HP', 'place_id': 'ChIJfSeay5jdKDoRc-DULUASr2o', 'plus_code': {'compound_code': '6JWR+77 Raipur, Chhattisgarh', 'global_code': '7MH36JWR+77'}, 'rating': 2.8, 'reference': 'ChIJfSeay5jdKDoRc-DULUASr2o', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 4, 'vicinity': 'Mantalay Shashtri Chowk, Raipur'}, {'geometry': {'location': {'lat': 21.2396833, 'lng': 81.62713330000001}, 'viewport': {'northeast': {'lat': 21.24092867989272, 'lng': 81.62845082989271}, 'southwest': {'lat': 21.23822902010728, 'lng': 81.62575117010728}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': '3f13daec9c2fa8aadce255b626f38c52cc5007f1', 'name': 'Alterantive Fuel', 'place_id': 'ChIJAQ_fDb_dKDoRAw8Wwyb_n2w', 'rating': 5, 'reference': 'ChIJAQ_fDb_dKDoRAw8Wwyb_n2w', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 1, 'vicinity': '16/512, Azad Chowk, G E Road, Azad Chowk, Raipur'}, {'geometry': {'location': {'lat': 21.2458224, 'lng': 81.6416426}, 'viewport': {'northeast': {'lat': 21.24717257989272, 'lng': 81.64302622989273}, 'southwest': {'lat': 21.24447292010727, 'lng': 81.64032657010728}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': '0800bab8ff45d9b6a70001a42f1eff08e45001bf', 'name': 'Chawla Service station', 'opening_hours': {'open_now': True}, 'place_id': 'ChIJIdGIy5jdKDoR79MbwkjAWWg', 'plus_code': {'compound_code': '6JWR+8M Raipur, Chhattisgarh', 'global_code': '7MH36JWR+8M'}, 'rating': 3.3, 'reference': 'ChIJIdGIy5jdKDoR79MbwkjAWWg', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 3, 'vicinity': 'Jail Rd, Kutchery Chowk, Raipur, Moudhapara, Raipur'}, {'geometry': {'location': {'lat': 21.2456735, 'lng': 81.6416095}, 'viewport': {'northeast': {'lat': 21.24701732989272, 'lng': 81.64299942989273}, 'southwest': {'lat': 21.24431767010728, 'lng': 81.64029977010728}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': '4294b74699a7d7e250f77c279e5b2ef636392e74', 'name': 'HP Petrol Pump - Chawla Service Station', 'opening_hours': {'open_now': True}, 'photos': [{'height': 4160, 'html_attributions': ['<a href="https://maps.google.com/maps/contrib/112890785733188340943">rameshwar kumar Sahu</a>'], 'photo_reference': 'CmRaAAAA6puWDFyOIVGlT5RKuhmmLXSv1VVXLv5Q1INNDCRFCrP_rCVzVjWgHjPLSYbYbVxynuwLDFq7tzkuapWVhTxzzMSlCF1M84h1CQHVSmlKRRZYR2NusDy1aD-M0LmnLnbNEhB_KmAcih_BpKcFqUWP8NBaGhSZKCntjvZOlj3gCGM6i-Z2Tk3RgQ', 'width': 3120}], 'place_id': 'ChIJKdT7y5jdKDoRoRvW1ul5kHw', 'plus_code': {'compound_code': '6JWR+7J Raipur, Chhattisgarh', 'global_code': '7MH36JWR+7J'}, 'rating': 3.7, 'reference': 'ChIJKdT7y5jdKDoRoRvW1ul5kHw', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 233, 'vicinity': 'OPP. Secretariate Shastri Chowk'}, {'geometry': {'location': {'lat': 21.243007, 'lng': 81.615011}, 'viewport': {'northeast': {'lat': 21.24425952989272, 'lng': 81.61632602989272}, 'southwest': {'lat': 21.24155987010728, 'lng': 81.61362637010728}}}, 'icon': 'https://maps.gstatic.com/mapfiles/place_api/icons/gas_station-71.png', 'id': '860bb3929e99db9c5f8152d4aa2fff8a4184ec2a', 'name': 'Bharat Petroleum', 'opening_hours': {'open_now': True}, 'photos': [{'height': 3456, 'html_attributions': ['<a href="https://maps.google.com/maps/contrib/102773039998208852339">Archit7Ojha</a>'], 'photo_reference': 'CmRaAAAANMPfYG4v3XjfuVSA8_CYqHI5HByXMgrdGTnc52wE-ygCCx8oPRahDcUJENvAKeZKYsJCh7ANMIZnbpPVXMJMjLXTN0nVtLrWyQpBpUjoxlb2IBd6FFThQLZzs0CeRXW9EhDvodK47VU233QaXX8cXg7ZGhTck0HmvP_KDRoTn0sZrOg48sur_w', 'width': 4608}], 'place_id': 'ChIJYbJ7A-jdKDoRetdX40gmD1g', 'plus_code': {'compound_code': '6JV8+62 Raipur, Chhattisgarh', 'global_code': '7MH36JV8+62'}, 'rating': 3.7, 'reference': 'ChIJYbJ7A-jdKDoRetdX40gmD1g', 'scope': 'GOOGLE', 'types': ['gas_station', 'point_of_interest', 'establishment'], 'user_ratings_total': 323, 'vicinity': 'Great Eastern Rd, Opposite Raj Kumar College, Choubey Colony, Ramkund, Raipur'}]
+        
+
+        
+
+        # keep looping upto length of y
+        # print('The closest petrol pump is:- ', y[0]['name'])
+        # print('The list of petrol pumps in ascending order is:- ')
+        # for i in range(len(y)): 
+            # print(y[i]['name'])
+        petrol_pump = PetrolPump.objects.filter(name=y[0]["name"])
+        if not petrol_pump:
+            petrol_pump = PetrolPump(
+                name=y[0]['name'],
+                rating=0.0,
+                number=0,
+                GRating=y[0]['rating']
+            )
+            petrol_pump.save()
+        else:
+            petrol_pump = petrol_pump[0]
+        print(petrol_pump)
+        res   ={'location': y[0]['geometry']['location'], 'name': y[ 0]['name'], 'rating': y[0 ]['rating'], 'Total_user_ratings': y[0]['user_ratings_total'], 'Area': y[ 0]['vicinity'], 'app_ratings': petrol_pump.rating}
+            # print(pumps_json[i])
+
+        # Dumping ot a json file
+
+        # print(pumps_json)
+
+        
+        return JsonResponse(res)
+
+def petrol_pump_ratings_response(request):
+    if request.method =="POST":
+        petrol_pump = PetrolPump.objects.get(name=request.POST["name"])
+        s = petrol_pump.rating * petrol_pump.number
+        petrol_pump.rating = ((s + request.POST["rating"])/(petrol_pump.number + 1))
+        petrol_pump.save()
+
+        response = {
+            "success": True
+        }
+
+        return JsonResponse(response)
+
+def CurrentStats(request):
+    if request.method == "POST":
+        token = request.POST['token']
+        user = UserAccount.objects.get(user=user)
+        currentData = CurrentData.objects.get(user=user)
+        resposeObject = {
+            'success':True,
+            'mileage':currentData.totalDistance/currentData.petrolConsumed,
+            'distance':currentData.totalDistance
+        }
+        return JsonResponse(resposeObject)
