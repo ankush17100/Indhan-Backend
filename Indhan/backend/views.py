@@ -635,7 +635,7 @@ def CurrentStats(request):
         currentData = CurrentData.objects.get(user=user)
         resposeObject = {
             'success':True,
-            'mileage':currentData.totalDistance/currentData.petrolConsumed
+            'mileage':currentData.totalDistance/currentData.petrolConsumed,
             'distance':currentData.totalDistance
         }
         return JsonResponse(resposeObject)
