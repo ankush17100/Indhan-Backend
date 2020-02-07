@@ -24,14 +24,14 @@ class Distance(models.Model):
     date = models.DateField()
     distance = models.DecimalField(decimal_places=2,max_digits=10)
     def __str__(self):
-        return self.user.username+" | "+str(self.date)
+        return self.user.username+" | "+str(self.date)+" | "+str(self.distance)
 
 class FuelConsumed(models.Model):
     user = models.ForeignKey(UserAccount,on_delete=models.CASCADE)
     date = models.DateField()
     fuel = models.DecimalField(decimal_places=2,max_digits=10)
     def __str__(self):
-        return self.user.username+" | "+str(self.date)
+        return self.user.username+" | "+str(self.date)+" | "+str(self.fuel)
 
 class CurrentData(models.Model):
     user = models.ForeignKey(UserAccount,on_delete=models.CASCADE)

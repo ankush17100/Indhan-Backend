@@ -108,12 +108,16 @@ def home_screen(request):
 			# mileage = list(mileage[:days])
 			# distance = list(distance[:days])
 			# fuelConsumed = list(fuelConsumed[:days])
+			mileage = mileage[:days]
+			distance = distance[:days]
+			fuelConsumed = fuelConsumed[:days]
+
+			mileage = [float(x.mileage) for x in mileage]
+			distance = [float(x.distance) for x in distance]
+			fuelConsumed = [float(x.fuel) for x in fuelConsumed]
 			print(mileage)
 			print(distance)
 			print(fuelConsumed)
-			mileage = [x.mileage for x in mileage]
-			distance = [x.distance for x in distance]
-			fuelConsumed = [x.fuel for x in fuelConsumed]
 			
 			resposeObject = {
 				'success':True,
@@ -771,16 +775,20 @@ def travelTime(request):
 	data = r.content
 	soup = BeautifulSoup(data, 'lxml')
 	mydivs = soup.findAll("span", {"class": "FCUp0c"})
-	if mydivs == []:
-		return JsonResponse({
-			'success':False
-		})
-	else:
+	# if mydivs == []:
+		# return JsonResponse({
+			# 'success':True
+		# })
+	# else:/
+	time = None
+	try:
 		time = mydivs[0].text
 		time = time.strip().split(' ')
-		time = float(time[0])+time[2]/60
-		print("time",time)
-		return JsonResponse({
-			'success':True,
-			'time':time
-		})
+		time = float(time[0])+float(time[2])/60
+	except:
+		time = 3
+	print("time",time)
+	return JsonResponse({
+		'success':True,
+		'time':time
+	})
