@@ -5,7 +5,7 @@ from django.conf import settings
 # Create your models here.
 class UserAccount(models.Model):
     username = models.CharField(max_length=20, default='')
-    password = models.CharField(max_length=20, default='')
+    password = models.CharField(max_length=70, default='')
     vehicleModel = models.CharField(max_length=20)
     token = models.IntegerField(primary_key=True)
 
@@ -46,7 +46,16 @@ class CurrentData(models.Model):
 
 class PetrolPump(models.Model):
     name = models.CharField(max_length=2000)
-    rating = models.FloatField()
+    # Ratings
+    bathroom = models.FloatField(default=0)
+    food = models.FloatField(default=0) # Do we need ths???
+    cashless = models.FloatField(default=0)
+    air = models.FloatField(default=0)
+    sanitation = models.FloatField(default=0)
+    payment = models.FloatField(default=0)
+    foodrating = models.FloatField(default=0)
+    rating = models.FloatField(default=0)
+
     #number of user that have given rating
     number = models.IntegerField()
     GRating = models.FloatField()
