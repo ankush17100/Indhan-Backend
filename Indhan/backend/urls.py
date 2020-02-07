@@ -13,5 +13,6 @@ urlpatterns = [
     path('refresh',views.Refresh,name="refresh"),
     path('petrolpump',views.webScrapping,name="petrolpump"),
     path('cities_and_prices', views.cities_and_prices, name="cities_and_prices"),
-    path('petrol_pump_ratings', views.petrol_pump_ratings, name="petrol_pump_ratings")
+    path('petrol_pump_ratings', views.petrol_pump_ratings, name="petrol_pump_ratings"),
+    path('petrol_pump_ratings_response',views.petrol_pump_ratings_response,name="petrol_pump_ratings_response")
 ]

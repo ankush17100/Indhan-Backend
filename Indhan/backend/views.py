@@ -505,8 +505,6 @@ def cities_and_prices(request):
 
         # print(mydivs[0])
 
-
-
         list1 = {}
         for a in range(0, len(mydivs)):
             t = mydivs[a]
@@ -589,7 +587,7 @@ def petrol_pump_ratings(request):
         
 
         
-        
+
         # keep looping upto length of y
         # print('The closest petrol pump is:- ', y[0]['name'])
         # print('The list of petrol pumps in ascending order is:- ')
@@ -621,7 +619,7 @@ def petrol_pump_ratings_response(request):
     if request.method =="POST":
         petrol_pump = PetrolPump.objects.get(name=request.POST["name"])
         s = petrol_pump.rating * petrol_pump.number
-        petrol_pump.rating = ((s + request.POST["rating"])/petrol_pump.number + 1)
+        petrol_pump.rating = ((s + request.POST["rating"])/(petrol_pump.number + 1))
         petrol_pump.save()
 
         response = {
@@ -629,3 +627,15 @@ def petrol_pump_ratings_response(request):
         }
 
         return JsonResponse(response)
+
+def CurrentStats(request):
+    if request.method == "POST":
+        token = request.POST['token']
+        user = UserAccount.objects.get(user=user)
+        currentData = CurrentData.objects.get(user=user)
+        resposeObject = {
+            'success':True,
+            'mileage':currentData.totalDistance/currentData.petrolConsumed
+            'distance':currentData.totalDistance
+        }
+        return JsonResponse(resposeObject)
