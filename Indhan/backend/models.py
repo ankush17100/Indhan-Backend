@@ -8,6 +8,7 @@ class UserAccount(models.Model):
     password = models.CharField(max_length=70, default='')
     vehicleModel = models.CharField(max_length=20)
     token = models.IntegerField(primary_key=True)
+    manufacture_year = models.CharField(max_length=20)
 
     def __str__(self):
         return self.username
@@ -61,3 +62,10 @@ class PetrolPump(models.Model):
     GRating = models.FloatField()
     def __str__(self):
         return self.name+" | "+str(self.rating)
+
+class Car(models.Model):
+    manufacture_year = models.IntegerField(),
+    model = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.model

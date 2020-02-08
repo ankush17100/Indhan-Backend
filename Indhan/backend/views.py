@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 # Create your views here.
-from .models import UserAccount, Mileage, Distance, FuelConsumed, CurrentData, PetrolPump
+from .models import UserAccount, Mileage, Distance, FuelConsumed, CurrentData, PetrolPump, Car
 import random
 import datetime
 import requests, json 
@@ -63,10 +63,24 @@ def login(request):
 		if user.password==hashPassword:
 			# Succesful login done
 			print("Succesful login done with",user)
+			mileage = UserAccount.objects.filter(vehicleModel = user.vehicleModel, manufacture_year = user.manufacture_year)
+			print(mileage)
+			average_mileage = 0
+			number_of_users = 0
+			try:
+				for user in mileage:
+					print(user)
+					user_details = Mileage.objects.get(user = user)
+					average_mileage+= user_details.mileage 
+					number_of_users += 1
+			except:
+				average_mileage = 28.3
+				number_of_users = 1
 			# return Success and token
 			returnObject = {
 				'success':True,
-				'token':user.token
+				'token':user.token,
+				'average_mileage': (average_mileage / number_of_users)
 			}
 			return JsonResponse(returnObject)
 		else:
@@ -81,7 +95,9 @@ def signup(request):
 	if request.method == "POST":
 		username = request.POST['username']
 		password = request.POST['password']
+		manufacture_year = request.POST['year']
 		vehicleModel = request.POST['model']
+		vehicleModel = vehicleModel.lower()
 		token = [random.randint(1, 9) for a in range(0, 10)]
 		token = "".join(str(x) for x in token)
 		hashPassowrd = encrypt(password,"blablabla")
@@ -98,8 +114,14 @@ def signup(request):
 				username = username,
 				password = hashPassowrd,
 				vehicleModel = vehicleModel,
-				token = token
+				token = token,
+				manufacture_year = manufacture_year
 			)
+			# car = Car(
+			# 	model = vehicleModel,
+			# 	manufacture_year = int(manufacture_year)
+			# )
+			# car.save()
 			userAccount.save()
 			newData = CurrentData(
 				user = userAccount,
